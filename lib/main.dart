@@ -1,4 +1,6 @@
-import 'package:estate/auth/agent_register_screen.dart';
+import 'package:estate/auth/login_screen.dart';
+import 'package:estate/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:refena_flutter/refena_flutter.dart';
@@ -19,6 +21,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true).copyWith(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           inputDecorationTheme: const InputDecorationTheme(
@@ -30,20 +33,25 @@ class MainApp extends StatelessWidget {
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 16),
+              textStyle: const TextStyle(fontSize: 17),
               elevation: 0,
               backgroundColor: Colors.blue,
               minimumSize: const Size.fromHeight(55),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+                  Radius.circular(5),
                 ),
               ),
               foregroundColor: Colors.white,
             ),
           )),
-      home: const Scaffold(
-        body: SafeArea(child: AgentRegisterScreen()),
+      home: Scaffold(
+        body: SafeArea(
+            child: StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  return  snapshot.data != null ? const MainScreen() : const LoginScreen();
+                })),
       ),
     );
   }

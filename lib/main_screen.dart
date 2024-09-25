@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:estate/log.dart';
 import 'package:estate/property/property_repository.dart';
+import 'package:estate/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'property/add_property_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -9,8 +14,13 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final property = PropertyRepository();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            navigateTo(context, const AddPropertyScreen());
+          }),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: property.getProperties(),
+        stream: property.getProperties(FirebaseAuth.instance.currentUser!.uid),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -47,17 +57,27 @@ class EstateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logInfo(estate['imageUrls']);
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(estate['image'].first, fit: BoxFit.cover),
+          (estate['imageUrls'] as List).isEmpty
+              ? const SizedBox.shrink()
+              : SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: MediaQuery.sizeOf(context).width * 0.35,
+                  child: Image.network(
+                    estate['imageUrls'][0],
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(estate['name']),
+                Text(estate['city']),
                 Text('${estate['price']}/month'),
               ],
             ),
