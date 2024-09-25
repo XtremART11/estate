@@ -13,7 +13,7 @@ class PropertyRepository {
         'price': data['price'],
         'description': data['description'],
         'location': data['location'],
-        'image': filesUrl,
+        'imageUrl': filesUrl,
       });
       logInfo('Document created successfully');
     } catch (e) {

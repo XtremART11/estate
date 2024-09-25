@@ -4,8 +4,7 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  # sdk: ^3.5.3
-  sdk: ^3.5.1
+  sdk: ^3.5.3
 
 dependencies:
   flutter:
@@ -25,6 +24,8 @@ dependencies:
   flutter_map_cancellable_tile_provider: ^3.0.2
   location: ^6.0.2
   latlong2: ^0.9.1
+  gap: ^3.0.1
+  refena_flutter: ^2.1.1
 
 dev_dependencies:
   flutter_test:

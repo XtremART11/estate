@@ -20,19 +20,59 @@ class MainScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return ListView.builder(
+          return GridView.builder(
             shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 15,
+              childAspectRatio: 0.7,
+            ),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              final document = snapshot.data!.docs[index];
-              return ListTile(
-                title: Text(document['name']),
-                subtitle: Text(document['description']),
-              );
+              final estate = snapshot.data!.docs[index];
+              return EstateCard(estate: estate);
             },
           );
         },
       ),
     );
   }
+}
+
+class EstateCard extends StatelessWidget {
+  const EstateCard({super.key, required this.estate});
+
+  final QueryDocumentSnapshot<Map<String, dynamic>> estate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(estate['image'].first, fit: BoxFit.cover),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(estate['name']),
+                Text('${estate['price']}/month'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Estate {
+  final String name;
+  final String imageUrl;
+  final String description;
+  final int price;
+
+  Estate({required this.description, required this.name, required this.imageUrl, required this.price});
 }
