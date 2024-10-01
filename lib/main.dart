@@ -1,8 +1,9 @@
-import 'package:estate/auth/agent_register_screen.dart';
+import 'package:estate/auth/register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
+import 'auth/login_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -43,7 +44,7 @@ class MainApp extends StatelessWidget {
             ),
           )),
       home: const Scaffold(
-        body: SafeArea(child: AgentRegisterScreen()),
+        body: SafeArea(child: LoginScreen()),
       ),
     );
   }

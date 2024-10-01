@@ -1,27 +1,28 @@
 import 'package:estate/app_layout.dart';
 import 'package:estate/auth/auth_controller.dart';
-import 'package:estate/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
-class AgentRegisterScreen extends StatefulWidget {
-  const AgentRegisterScreen({super.key});
+import '../utils.dart';
+import 'login_screen.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<AgentRegisterScreen> createState() => _AgentRegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _AgentRegisterScreenState extends State<AgentRegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final ref = context.ref;
     final authState = context.watch(authControllerProvider);
     final textTheme = Theme.of(context).textTheme;
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: AppLayout(
+    return Scaffold(
+      body: AppLayout(
         child: authState.isLoading
             ? const Center(child: CircularProgressIndicator())
             : Column(
@@ -31,9 +32,20 @@ class _AgentRegisterScreenState extends State<AgentRegisterScreen> {
                     'Creer un compte',
                     style: textTheme.headlineMedium,
                   ),
-                  Text(
-                    'Inscrivez-vous en tant que agent immobilier',
-                    style: textTheme.bodyMedium,
+                  Row(
+                    children: [
+                      Text(
+                        'Vous avez deja un compte ?',
+                        style: textTheme.bodyMedium,
+                      ),
+                      TextButton(
+                        onPressed: () => navigateTo(context, const LoginScreen()),
+                        child: Text(
+                          'Connectez-vous',
+                          style: textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
                   ),
                   const Gap(30),
                   FormBuilder(
@@ -55,7 +67,7 @@ class _AgentRegisterScreenState extends State<AgentRegisterScreen> {
                     const Gap(20),
                     ElevatedButton(
                         onPressed: () {
-                          ref.notifier(authControllerProvider).registerAgent(name: name, phone: phone, email: email, password: password);
+                          // ref.notifier(authControllerProvider).registerAgent(name: name, phone: phone, email: email, password: password);
                         },
                         child: const Text('Creer mon compte')),
                     // const Text("S'inscrire en tant que Agent immobilier"),
