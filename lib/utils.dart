@@ -6,3 +6,16 @@ navigateTo(BuildContext context, Widget page) => Navigator.push(
         builder: (context) => page,
       ),
     );
+    
+navigateToReplace(BuildContext context, Widget page) => Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+
+showToast(BuildContext context, String message) => ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );

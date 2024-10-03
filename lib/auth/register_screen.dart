@@ -1,10 +1,11 @@
-import 'package:estate/app_layout.dart';
 import 'package:estate/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
+import '../agent_main_screen.dart';
+import '../app_layout.dart';
 import '../utils.dart';
 import 'login_screen.dart';
 
@@ -16,6 +17,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final ref = context.ref;
@@ -51,23 +56,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   FormBuilder(
                       child: Column(children: [
                     FormBuilderTextField(
+                      controller: nameController,
                       name: 'name',
                       decoration: const InputDecoration(labelText: 'Nom'),
                     ),
                     const Gap(10),
                     FormBuilderTextField(
+                      controller: phoneController,
                       name: 'phone',
                       decoration: const InputDecoration(labelText: 'Telephone'),
                     ),
                     const Gap(10),
                     FormBuilderTextField(
+                      controller: emailController,
                       name: 'email',
                       decoration: const InputDecoration(labelText: 'Email'),
+                    ),
+                    const Gap(10),
+                    FormBuilderTextField(
+                      controller: passwordController,
+                      name: 'password',
+                      decoration: const InputDecoration(labelText: 'Mot de passe'),
                     ),
                     const Gap(20),
                     ElevatedButton(
                         onPressed: () {
-                          // ref.notifier(authControllerProvider).registerAgent(name: name, phone: phone, email: email, password: password);
+                          ref.notifier(authControllerProvider).registerAgent(
+                                name: nameController.text,
+                                phone: phoneController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                onSuccess: () {
+                                  showToast(context, 'Compte cree avec succes');
+                                  navigateToReplace(context, const AgentMainScreen());
+                                },
+                              );
                         },
                         child: const Text('Creer mon compte')),
                     // const Text("S'inscrire en tant que Agent immobilier"),

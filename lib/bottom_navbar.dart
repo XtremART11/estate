@@ -1,4 +1,4 @@
-import 'package:estate/merchant/merchant_home_screen.dart';
+import 'package:estate/property/add_property_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,6 @@ class _BottomNavbarState extends State<BottomNavbar> {
       body: IndexedStack(
         index: pageIndex,
         children: const [
-          MerchantHomeScreen(),
           ProfileScreen(),
         ],
       ),

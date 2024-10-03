@@ -1,5 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:estate/auth/login_screen.dart';
+import 'package:estate/auth/register_screen.dart';
+import 'package:estate/default_app_spacing.dart';
+import 'package:estate/log.dart';
 import 'package:estate/property/property_repository.dart';
+import 'package:estate/utils.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -9,32 +14,44 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final property = PropertyRepository();
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: property.getProperties(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
+      appBar: AppBar(
+        title: const Text('Estate'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                navigateTo(context, const LoginScreen());
+              },
+              child: const Text('Se connecter en tant que agent'))
+        ],
+      ),
+      body: DefaultAppSpacing(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: property.getProperties(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          return GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 15,
-              childAspectRatio: 0.7,
-            ),
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              final estate = snapshot.data!.docs[index];
-              return EstateCard(estate: estate);
-            },
-          );
-        },
+            return GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 15,
+                childAspectRatio: 0.7,
+              ),
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final estate = snapshot.data!.docs[index];
+                return EstateCard(estate: estate);
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -47,17 +64,27 @@ class EstateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logInfo(estate['imageUrls']);
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(estate['image'].first, fit: BoxFit.cover),
+          (estate['imageUrls'] as List).isEmpty
+              ? const SizedBox.shrink()
+              : SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: MediaQuery.sizeOf(context).width * 0.35,
+                  child: Image.network(
+                    estate['imageUrls'][0],
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(estate['name']),
+                Text(estate['city']),
                 Text('${estate['price']}/month'),
               ],
             ),
