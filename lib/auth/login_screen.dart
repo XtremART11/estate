@@ -1,4 +1,5 @@
 import 'package:estate/app_layout.dart';
+import 'package:estate/auth/register_screen.dart';
 import 'package:estate/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -64,7 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Vous n\'avez pas de compte ?'),
-                        TextButton(onPressed: () {}, child: const Text("S'inscrire")),
+                        TextButton(
+                            onPressed: () {
+                              navigateTo(context, const RegisterScreen());
+                            },
+                            child: const Text("S'inscrire")),
                       ],
                     )
                   ],
