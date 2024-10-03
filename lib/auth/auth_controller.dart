@@ -12,12 +12,28 @@ class AuthController extends AsyncNotifier<void> {
     return await null;
   }
 
+  Future<void> login({
+    required String email,
+    required String password,
+    VoidCallback? onSuccess,
+  }) async {
+    final authRepo = AuthRepository();
+    try {
+      state = const AsyncValue.loading();
+      await authRepo.login(email, password);
+      state = const AsyncValue.data(null);
+      onSuccess?.call();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
+
   registerAgent({
     required String name,
     required String phone,
     required String email,
     required String password,
-   VoidCallback? onSuccess,
+    VoidCallback? onSuccess,
   }) async {
     final authRepo = AuthRepository();
     try {

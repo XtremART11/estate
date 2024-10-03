@@ -1,6 +1,7 @@
 import 'package:estate/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
@@ -69,8 +70,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const Gap(10),
                     FormBuilderTextField(
                       controller: emailController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       name: 'email',
                       decoration: const InputDecoration(labelText: 'Email'),
+                      validator: FormBuilderValidators.email(),
                     ),
                     const Gap(10),
                     FormBuilderTextField(

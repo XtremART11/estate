@@ -33,7 +33,7 @@ class AgentProfileScreen extends StatelessWidget {
             navigateTo(context, const AddPropertyScreen());
           }),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: property.getProperties(FirebaseAuth.instance.currentUser!.uid),
+        stream: FirebaseAuth.instance.currentUser != null ? property.getProperties(FirebaseAuth.instance.currentUser!.uid):property.getProperties(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');

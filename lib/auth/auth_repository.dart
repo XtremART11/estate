@@ -3,6 +3,27 @@ import 'package:estate/log.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
+  Future<void> login(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
+      // User logged in successfully
+      logInfo('User logged in successfully: ${userCredential.user?.uid}');
+      // Navigate to the home screen or other desired destination
+    } on FirebaseAuthException catch (e) {
+      // Handle login errors
+      if (e.code == 'user-not-found') {
+        logErr('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        logErr('Wrong password provided.');
+      } else {
+        logErr('Login failed: ${e.message}');
+      }
+      rethrow;
+    }
+  }
+
   registerAgent({
     required String email,
     required String password,
@@ -19,6 +40,7 @@ class AuthRepository {
       logInfo(res);
     } catch (e) {
       logErr(e);
+      rethrow;
     }
   }
 
