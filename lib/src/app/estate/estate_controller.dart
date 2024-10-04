@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:estate/log.dart';
-import 'package:estate/property/property_repository.dart';
+import 'package:estate/src/core/log.dart';
+import 'package:estate/src/app/estate/estate_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
@@ -13,24 +13,28 @@ class PropertyNotifier extends AsyncNotifier<void> {
     await Future.value(null);
   }
 
-  addProperty({
+  addEstate({
     required String city,
     required String price,
     required String description,
-    required List imageUrls,
-    required String location,
+    required List featuredImageLink,
+    required List fileLinks,
+    required Map<String,dynamic> location,
     required String quarter,
+    required List<Map<String, dynamic>> coordinates,
     VoidCallback? onSuccess,
   }) async {
     final property = PropertyRepository();
     try {
       state = const AsyncValue.loading();
-      await property.addProperty({
+      await property.addEstate({
         'city': city,
         'price': price,
         'description': description,
         'quarter': quarter,
-        'imageUrls': imageUrls,
+        'fileLinks': fileLinks,
+        'featuredImageLink': featuredImageLink,
+        'coordinates': coordinates,
         'location': location,
       });
       state = const AsyncValue.data(null);

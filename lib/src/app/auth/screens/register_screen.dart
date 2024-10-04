@@ -1,13 +1,13 @@
-import 'package:estate/auth/auth_controller.dart';
+import 'package:estate/src/app/auth/auth_controller.dart';
+import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
-import '../agent_main_screen.dart';
-import '../app_layout.dart';
-import '../utils.dart';
+import '../../../core/utils.dart';
+import '../../agent/home_screen.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final authState = context.watch(authControllerProvider);
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: AppLayout(
+      body: AppDefaultSpacing(
         child: authState.isLoading
             ? const Center(child: CircularProgressIndicator())
             : Column(
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 password: passwordController.text,
                                 onSuccess: () {
                                   showToast(context, 'Compte cree avec succes');
-                                  navigateToReplace(context, const AgentMainScreen());
+                                  navigateToReplace(context, const HomeScreen());
                                 },
                               );
                         },

@@ -1,9 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:estate/log.dart';
+import 'package:estate/src/core/log.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
+      logErr(e.toString());
+    } catch (e) {
+      logErr(e.toString());
+    }
+  }
+
   Future<void> login(String email, String password) async {
+    logInfo('$email, $password');
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);

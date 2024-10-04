@@ -1,5 +1,5 @@
-import 'package:estate/agent_main_screen.dart';
-import 'package:estate/main_screen.dart';
+import 'package:estate/src/app/agent/home_screen.dart';
+import 'package:estate/src/app/no_account_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +49,9 @@ class MainApp extends StatelessWidget {
         body: StreamBuilder(
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return const AgentMainScreen();
+              return const HomeScreen();
             }
-            return const MainScreen();
+            return const NoAccountScreen();
           },
           stream: FirebaseAuth.instance.authStateChanges(),
         ),

@@ -1,39 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:estate/property/add_property_screen.dart';
-import 'package:estate/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:estate/src/app/estate/estate_repository.dart';
+import 'package:estate/src/core/default_app_spacing.dart';
+import 'package:estate/src/core/log.dart';
+import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'agent_main_screen.dart';
-import 'default_app_spacing.dart';
-import 'property/property_repository.dart';
-import 'property_detail_screen.dart';
+import '../estate/screens/estate_detail_screen.dart';
+import '../estate/widgets/estate_card.dart';
+import 'profile_screen.dart';
 
-class AgentProfileScreen extends StatelessWidget {
-  const AgentProfileScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final property = PropertyRepository();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mon Espace'),
+        title: const Text('Estate'),
         actions: [
           IconButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
+              onPressed: () {
+                navigateTo(context, const ProfileScreen());
               },
-              icon: const Icon(Icons.logout))
+              icon: const Icon(Icons.person_2_outlined))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            navigateTo(context, const AddPropertyScreen());
-          }),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseAuth.instance.currentUser != null ? property.getProperties(FirebaseAuth.instance.currentUser!.uid):property.getProperties(),
+        stream: property.getEstates(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -43,7 +37,7 @@ class AgentProfileScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return DefaultAppSpacing(
+          return AppDefaultSpacing(
             child: GridView.builder(
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,7 +53,7 @@ class AgentProfileScreen extends StatelessWidget {
                   estate: estate,
                   onTap: () => navigateTo(
                       context,
-                      PropertyDetailScreen(
+                      EstateDetailScreen(
                         estate: estate,
                       )),
                 );
@@ -71,3 +65,5 @@ class AgentProfileScreen extends StatelessWidget {
     );
   }
 }
+
+

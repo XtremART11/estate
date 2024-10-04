@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class DefaultAppSpacing extends StatelessWidget {
+class AppDefaultSpacing extends StatelessWidget {
   final Widget child;
-  const DefaultAppSpacing({super.key, required this.child});
+  const AppDefaultSpacing({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class DefaultAppSpacing extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: child,
         ),
       ),
