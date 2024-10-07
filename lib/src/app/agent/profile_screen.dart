@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estate/src/app/auth/auth_controller.dart';
 import 'package:estate/src/app/estate/screens/estate_add_screen.dart';
+import 'package:estate/src/app/estate/screens/estate_list_screen.dart';
 import 'package:estate/src/core/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,6 @@ import 'package:refena_flutter/refena_flutter.dart';
 
 import '../../core/default_app_spacing.dart';
 import '../estate/estate_repository.dart';
-import '../estate/screens/estate_detail_screen.dart';
-import '../estate/widgets/estate_card.dart';
 import '../no_account_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -17,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final property = PropertyRepository();
+    final estateRepo = EstateRepository();
     final ref = context.ref;
     final authState = context.watch(authControllerProvider);
     return Scaffold(
@@ -31,7 +30,8 @@ class ProfileScreen extends StatelessWidget {
                     builder: (context) {
                       return AlertDialog(
                         title: const Text("Se déconnecter ?"),
-                        content: const Text("Souhaitez-vous réellement vous déconnecter ?"),
+                        content:
+                            Text("Souhaitez-vous réellement vous déconnecter ?", style: textTheme(context).bodyLarge),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -40,11 +40,14 @@ class ProfileScreen extends StatelessWidget {
                                   );
                               showToast(context, "Vous avez bien été déconnecté !");
                             },
-                            child: const Text("Se deconnecter"),
+                            child: Text(
+                              "Se deconnecter",
+                              style: textTheme(context).bodyLarge?.copyWith(color: Colors.red),
+                            ),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text("Annuler"),
+                            child: Text("Annuler", style: textTheme(context).bodyLarge),
                           ),
                         ],
                       );
@@ -62,8 +65,8 @@ class ProfileScreen extends StatelessWidget {
           ? const Center(child: CircularProgressIndicator())
           : StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: FirebaseAuth.instance.currentUser != null
-                  ? property.getEstates(FirebaseAuth.instance.currentUser!.uid)
-                  : property.getEstates(),
+                  ? estateRepo.getEstates(FirebaseAuth.instance.currentUser!.uid)
+                  : estateRepo.getEstates(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
@@ -73,29 +76,7 @@ class ProfileScreen extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                return AppDefaultSpacing(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 15,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      final estate = snapshot.data!.docs[index];
-                      return EstateCard(
-                        estate: estate,
-                        onTap: () => navigateTo(
-                            context,
-                            EstateDetailScreen(
-                              estate: estate,
-                            )),
-                      );
-                    },
-                  ),
-                );
+                return AppDefaultSpacing(child: EstateListScreen(snapshot: snapshot));
               },
             ),
     );

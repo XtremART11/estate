@@ -3,7 +3,7 @@ import 'package:estate/src/core/log.dart';
 import 'package:estate/src/core/services/upload_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class PropertyRepository {
+class EstateRepository {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   Future<void> addEstate(Map<String, dynamic> data) async {
     try {
@@ -18,6 +18,7 @@ class PropertyRepository {
         'price': data['price'],
         'description': data['description'],
         'location': data['location'],
+        'area': data['area'],
         'fileUrls': fileLinks,
       });
       logInfo('Document created successfully');
@@ -35,9 +36,9 @@ class PropertyRepository {
   Future<void> updateEstate(String estateId, Map<String, dynamic> data) async {
     try {
       await firestore.collection('estates').doc(estateId).update(data);
-      print('Document updated successfully');
+      logInfo('Document updated successfully');
     } catch (e) {
-      print('Error updating document: $e');
+      logErr('Error updating document: $e');
     }
   }
 }

@@ -19,14 +19,15 @@ dependencies:
   firebase_storage: ^12.3.1
   form_builder_image_picker: ^4.1.0
   flutter_map: ^7.0.2
-  flutter_map_cancellable_tile_provider: ^3.0.2
   location: ^6.0.2
   latlong2: ^0.9.1
   gap: ^3.0.1
   refena_flutter: ^2.1.1
   whatsapp_unilink: ^2.1.0
   form_builder_file_picker: ^4.2.0
-  backdrop: ^0.9.1
+  cached_network_image: ^3.4.1
+  carousel_slider: ^5.0.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

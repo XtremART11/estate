@@ -23,28 +23,46 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true).copyWith(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          inputDecorationTheme: const InputDecorationTheme(
-            border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(),
-            errorBorder: OutlineInputBorder(),
-            disabledBorder: OutlineInputBorder(),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        inputDecorationTheme: InputDecorationTheme(
+          border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 17),
-              elevation: 0,
-              backgroundColor: Colors.blue,
-              minimumSize: const Size.fromHeight(55),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
-                ),
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.5))),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          disabledBorder: const OutlineInputBorder(),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 17),
+            elevation: 0,
+            minimumSize: const Size.fromHeight(55),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
               ),
-              foregroundColor: Colors.white,
             ),
-          )),
+            foregroundColor: Colors.blue,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            textStyle: const TextStyle(fontSize: 17),
+            elevation: 0,
+            backgroundColor: Colors.blue,
+            minimumSize: const Size.fromHeight(55),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ),
       home: Scaffold(
         body: StreamBuilder(
           builder: (context, snapshot) {

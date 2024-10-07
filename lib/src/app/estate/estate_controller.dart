@@ -15,6 +15,7 @@ class PropertyNotifier extends AsyncNotifier<void> {
 
   addEstate({
     required String city,
+    required String area,
     required String price,
     required String description,
     required List featuredImageLink,
@@ -24,10 +25,10 @@ class PropertyNotifier extends AsyncNotifier<void> {
     required List<Map<String, dynamic>> coordinates,
     VoidCallback? onSuccess,
   }) async {
-    final property = PropertyRepository();
+    final estateRepo = EstateRepository();
     try {
       state = const AsyncValue.loading();
-      await property.addEstate({
+      await estateRepo.addEstate({
         'city': city,
         'price': price,
         'description': description,
@@ -35,6 +36,7 @@ class PropertyNotifier extends AsyncNotifier<void> {
         'fileLinks': fileLinks,
         'featuredImageLink': featuredImageLink,
         'coordinates': coordinates,
+        'area': area,
         'location': location,
       });
       state = const AsyncValue.data(null);

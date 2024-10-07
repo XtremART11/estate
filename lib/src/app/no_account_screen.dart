@@ -5,15 +5,14 @@ import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'agent/home_screen.dart';
-import 'estate/widgets/estate_card.dart';
+import 'estate/widgets/estate_list_view.dart';
 
 class NoAccountScreen extends StatelessWidget {
   const NoAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final property = PropertyRepository();
+    final estateRepo = EstateRepository();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Estate'),
@@ -27,7 +26,7 @@ class NoAccountScreen extends StatelessWidget {
       ),
       body: AppDefaultSpacing(
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: property.getEstates(),
+          stream: estateRepo.getEstates(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -37,22 +36,8 @@ class NoAccountScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 15,
-                childAspectRatio: 0.7,
-              ),
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final estate = snapshot.data!.docs[index];
-                return EstateCard(
-                  estate: estate,
-                  onTap: () {},
-                );
-              },
+            return EstateListView(
+              snapshot: snapshot,
             );
           },
         ),

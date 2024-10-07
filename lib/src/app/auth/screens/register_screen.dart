@@ -22,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     final ref = context.ref;
@@ -31,74 +32,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: AppDefaultSpacing(
         child: authState.isLoading
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Creer un compte',
-                    style: textTheme.headlineMedium,
-                  ),
-                  Row(
+            : Center(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Vous avez deja un compte ?',
-                        style: textTheme.bodyMedium,
+                        'Creer un compte',
+                        style: textTheme.headlineMedium,
                       ),
-                      TextButton(
-                        onPressed: () => navigateTo(context, const LoginScreen()),
-                        child: Text(
-                          'Connectez-vous',
-                          style: textTheme.bodyMedium,
-                        ),
+                      Row(
+                        children: [
+                          const Text(
+                            'Vous avez deja un compte ?',
+                          ),
+                          TextButton(
+                            onPressed: () => navigateTo(context, const LoginScreen()),
+                            child: const Text(
+                              'Connectez-vous',
+                            ),
+                          ),
+                        ],
                       ),
+                      FormBuilder(
+                          key: _formKey,
+                          child: Column(children: [
+                            FormBuilderTextField(
+                              controller: nameController,
+                              name: 'name',
+                              decoration: const InputDecoration(labelText: 'Nom & prenom'),
+                              validator: FormBuilderValidators.required(),
+                            ),
+                            const Gap(10),
+                            FormBuilderTextField(
+                              controller: phoneController,
+                              name: 'phone',
+                              decoration: const InputDecoration(labelText: 'Telephone'),
+                              validator: FormBuilderValidators.numeric(),
+                              keyboardType: TextInputType.number,
+                            ),
+                            const Gap(10),
+                            FormBuilderTextField(
+                              controller: emailController,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              name: 'email',
+                              decoration: const InputDecoration(labelText: 'Email'),
+                              validator: FormBuilderValidators.email(),
+                            ),
+                            const Gap(10),
+                            FormBuilderTextField(
+                              controller: passwordController,
+                              name: 'password',
+                              decoration: const InputDecoration(labelText: 'Mot de passe'),
+                              validator: FormBuilderValidators.password(
+                                minLength: 6,
+                                minLowercaseCount: 0,
+                                minNumberCount: 0,
+                                minUppercaseCount: 0,
+                                minSpecialCharCount: 0,
+                              ),
+                            ),
+                            const Gap(20),
+                            ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    ref.notifier(authControllerProvider).registerAgent(
+                                          name: nameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                          onSuccess: () {
+                                            showToast(context, 'Compte cree avec succes');
+                                            navigateToReplace(context, const HomeScreen());
+                                          },
+                                        );
+                                  }
+                                },
+                                child: const Text('Creer mon compte')),
+                            // const Text("S'inscrire en tant que Agent immobilier"),
+                          ])),
                     ],
                   ),
-                  const Gap(30),
-                  FormBuilder(
-                      child: Column(children: [
-                    FormBuilderTextField(
-                      controller: nameController,
-                      name: 'name',
-                      decoration: const InputDecoration(labelText: 'Nom'),
-                    ),
-                    const Gap(10),
-                    FormBuilderTextField(
-                      controller: phoneController,
-                      name: 'phone',
-                      decoration: const InputDecoration(labelText: 'Telephone'),
-                    ),
-                    const Gap(10),
-                    FormBuilderTextField(
-                      controller: emailController,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      name: 'email',
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      validator: FormBuilderValidators.email(),
-                    ),
-                    const Gap(10),
-                    FormBuilderTextField(
-                      controller: passwordController,
-                      name: 'password',
-                      decoration: const InputDecoration(labelText: 'Mot de passe'),
-                    ),
-                    const Gap(20),
-                    ElevatedButton(
-                        onPressed: () {
-                          ref.notifier(authControllerProvider).registerAgent(
-                                name: nameController.text,
-                                phone: phoneController.text,
-                                email: emailController.text,
-                                password: passwordController.text,
-                                onSuccess: () {
-                                  showToast(context, 'Compte cree avec succes');
-                                  navigateToReplace(context, const HomeScreen());
-                                },
-                              );
-                        },
-                        child: const Text('Creer mon compte')),
-                    // const Text("S'inscrire en tant que Agent immobilier"),
-                  ])),
-                ],
+                ),
               ),
       ),
     );

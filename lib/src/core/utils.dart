@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+TextTheme textTheme(BuildContext context) => Theme.of(context).textTheme;
+screenH(BuildContext context) => MediaQuery.of(context).size.height;
+screenW(BuildContext context) => MediaQuery.of(context).size.width;
 
 navigateTo(BuildContext context, Widget page) => Navigator.push(
       context,

@@ -20,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     final ref = context.ref;
@@ -33,36 +34,54 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: FormBuilder(
+                    key: _formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Se connecter',
                           style: textTheme.headlineMedium,
                         ),
+                        const Text(
+                          'Connectez-vous à votre compte afin de pouvoir ajouter de nouveaux immeubles',
+                        ),
                         const Gap(20),
                         FormBuilderTextField(
-                          name: '',
-                          controller: emailController,
-                          decoration: const InputDecoration(labelText: "Email"),
-                          validator: FormBuilderValidators.email(),
-                        ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            name: 'email',
+                            controller: emailController,
+                            decoration: const InputDecoration(labelText: "Email"),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.email(),
+                              FormBuilderValidators.required(),
+                            ])),
                         const Gap(10),
                         FormBuilderTextField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           controller: passwordController,
-                          name: '',
+                          name: 'password',
                           decoration: const InputDecoration(labelText: "Mot de passe"),
+                          validator: FormBuilderValidators.password(
+                            minLength: 6,
+                            minLowercaseCount: 0,
+                            minNumberCount: 0,
+                            minUppercaseCount: 0,
+                            minSpecialCharCount: 0,
+                          ),
                         ),
                         const Gap(20),
                         ElevatedButton(
                             onPressed: () {
-                              ref.notifier(authControllerProvider).login(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    onSuccess: () {
-                                      showToast(context, 'Bienvenue');
-                                      navigateToReplace(context, const HomeScreen());
-                                    },
-                                  );
+                              if (_formKey.currentState!.validate()) {
+                                ref.notifier(authControllerProvider).login(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      onSuccess: () {
+                                        showToast(context, 'Bienvenue');
+                                        navigateToReplace(context, const HomeScreen());
+                                      },
+                                    );
+                              }
                             },
                             child: const Text("Se connecter")),
                         const Gap(10),
