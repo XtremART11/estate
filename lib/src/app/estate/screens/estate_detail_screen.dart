@@ -28,23 +28,35 @@ class EstateDetailScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: CarouselSlider(
-                  items: [
-                    ...estate['fileUrls'].map((url) {
-                      return Builder(builder: (BuildContext context) {
-                        return CachedNetworkImage(
-                          // height: screenH(context) * 0.4,
-                          fit: BoxFit.cover,
-                          imageUrl: url,
-                        );
-                      });
-                    })
-                  ],
-                  options:
-                      CarouselOptions(aspectRatio: 1.2, enlargeCenterPage: true, viewportFraction: 1, autoPlay: true),
-                ),
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: CarouselSlider(
+                      items: [
+                        ...estate['fileUrls'].map((url) {
+                          return Builder(builder: (BuildContext context) {
+                            return CachedNetworkImage(
+                              // height: screenH(context) * 0.4,
+                              fit: BoxFit.cover,
+                              imageUrl: url,
+                            );
+                          });
+                        })
+                      ],
+                      options: CarouselOptions(
+                          aspectRatio: 1.2, enlargeCenterPage: true, viewportFraction: 1, autoPlay: true),
+                    ),
+                  ),
+                  Positioned(
+                      right: 20,
+                      top: 10,
+                      child: IconButton.filled(
+                          color: Colors.black26,
+                          style: IconButton.styleFrom(backgroundColor: Colors.white),
+                          onPressed: () {},
+                          icon: const Icon(Icons.favorite_border_rounded)))
+                ],
               ),
               const Gap(30),
               GestureDetector(

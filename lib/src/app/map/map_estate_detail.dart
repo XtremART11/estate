@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estate/src/app/agent/agent_repository.dart';
+import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
-
-import '../../core/default_app_spacing.dart';
 
 class MapEstateDetail extends StatelessWidget {
   final List estates;
@@ -17,31 +17,51 @@ class MapEstateDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppDefaultSpacing(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Wrap(
-              runSpacing: 10,
-              spacing: 10,
-              children: [
-                ...estate['fileUrls'].map((url) {
-                  return Builder(builder: (BuildContext context) {
-                    return ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: CachedNetworkImage(
-                        height: screenH(context) * 0.1,
-                        fit: BoxFit.cover,
-                        imageUrl: url,
-                      ),
-                    );
-                  });
-                })
-              ],
-            ),
-            const Gap(20),
-            Container(
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          CarouselSlider(
+            items: [
+              ...estate['fileUrls'].map((url) {
+                return Builder(builder: (BuildContext context) {
+                  return ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: CachedNetworkImage(
+                      // height: screenH(context) * 0.4,
+                      fit: BoxFit.cover,
+                      imageUrl: url,
+                    ),
+                  );
+                });
+              })
+            ],
+            options: CarouselOptions(aspectRatio: 1.4, viewportFraction: 1, autoPlay: true),
+          ),
+
+          // Wrap(
+          //   runSpacing: 10,
+          //   spacing: 10,
+          //   children: [
+
+          //     ...estate['fileUrls'].map((url) {
+          //       return Builder(builder: (BuildContext context) {
+          //         return ClipRRect(
+          //           borderRadius: const BorderRadius.all(Radius.circular(10)),
+          //           child: CachedNetworkImage(
+          //             height: screenH(context) * 0.1,
+          //             fit: BoxFit.cover,
+          //             imageUrl: url,
+          //           ),
+          //         );
+          //       });
+          //     })
+          //   ],
+          // ),
+
+          const Gap(10),
+          AppDefaultSpacing(
+            child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.grey.withOpacity(0.2)),
@@ -133,8 +153,8 @@ class MapEstateDetail extends StatelessWidget {
                         }),
                   ]),
                 )),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

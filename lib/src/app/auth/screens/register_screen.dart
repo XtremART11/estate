@@ -18,6 +18,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  bool obscureText = true;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
@@ -84,7 +85,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             FormBuilderTextField(
                               controller: passwordController,
                               name: 'password',
-                              decoration: const InputDecoration(labelText: 'Mot de passe'),
+                              decoration: InputDecoration(
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => setState(() {
+                                      obscureText = !obscureText;
+                                    }),
+                                    child: obscureText
+                                        ? const Icon(Icons.visibility_rounded)
+                                        : const Icon(Icons.visibility_off_rounded),
+                                  ),
+                                  labelText: 'Mot de passe'),
                               validator: FormBuilderValidators.password(
                                 minLength: 6,
                                 minLowercaseCount: 0,

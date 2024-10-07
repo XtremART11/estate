@@ -28,13 +28,7 @@ class EstateListView extends StatelessWidget {
                   estate: estate,
                   estates: snapshot.data!.docs,
                 ));
-            // navigateTo(
-            //   context,
-            //   MapScreen(
-            //     estates: snapshot.data!.docs,
-            //     initialLocation: estate['location'],
-            //   ),
-            // );
+            
           },
         );
       },

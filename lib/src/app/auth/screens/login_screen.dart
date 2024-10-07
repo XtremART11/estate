@@ -1,4 +1,5 @@
 import 'package:estate/src/app/auth/screens/register_screen.dart';
+import 'package:estate/src/app/main_screen.dart';
 import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -7,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
 import '../../../core/default_app_spacing.dart';
-import '../../agent/home_screen.dart';
 import '../auth_controller.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool obscureText = true;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -60,7 +61,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           controller: passwordController,
                           name: 'password',
-                          decoration: const InputDecoration(labelText: "Mot de passe"),
+                          obscureText: obscureText,
+                          decoration: InputDecoration(
+                              suffixIcon: GestureDetector(
+                                onTap: () => setState(() {
+                                  obscureText = !obscureText;
+                                }),
+                                child: obscureText
+                                    ? const Icon(Icons.visibility_rounded)
+                                    : const Icon(Icons.visibility_off_rounded),
+                              ),
+                              labelText: "Mot de passe"),
                           validator: FormBuilderValidators.password(
                             minLength: 6,
                             minLowercaseCount: 0,
@@ -78,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       password: passwordController.text,
                                       onSuccess: () {
                                         showToast(context, 'Bienvenue');
-                                        navigateToReplace(context, const HomeScreen());
+                                        navigateToReplace(context, const MainScreen());
                                       },
                                     );
                               }
