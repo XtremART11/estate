@@ -10,6 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.estate"
+    namespace = "com.example.estate"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

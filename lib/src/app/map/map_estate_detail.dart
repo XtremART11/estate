@@ -121,7 +121,7 @@ class MapEstateDetail extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('Nom du vendeur:'),
-                                  snapshot.data!.data()?['name'].isEmpty
+                                  snapshot.data?.data()?['name'] == null
                                       ? const Text('')
                                       : Text(snapshot.data!.data()?['name']),
                                 ],
@@ -131,7 +131,7 @@ class MapEstateDetail extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('Telephone:'),
-                                  snapshot.data!.data()?['phone'].isEmpty
+                                  snapshot.data?.data()?['phone'] == null
                                       ? const Text('')
                                       : Text(snapshot.data!.data()?['phone']),
                                   // Text(snapshot.data!.data()?['phone'] ?? ''),

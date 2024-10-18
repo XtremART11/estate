@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estate/src/app/agent/profile_screen.dart';
 import 'package:estate/src/app/explore_screen.dart';
-import 'package:estate/src/app/favorite_screen.dart';
 import 'package:estate/src/app/map/map_screen.dart';
+import 'package:estate/src/app/my_listing_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'estate/estate_repository.dart';
@@ -31,13 +31,13 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Icons.explore),
               label: 'Explore',
             ),
-            // NavigationDestination(
-            //   icon: Icon(Icons.favorite_border_rounded),
-            //   label: 'Favoris',
-            // ),
             NavigationDestination(
               icon: Icon(Icons.map_rounded),
               label: 'Carte',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.list_rounded),
+              label: 'Mes Listings',
             ),
             NavigationDestination(
               icon: Icon(Icons.person_2_outlined),
@@ -59,11 +59,11 @@ class _MainScreenState extends State<MainScreen> {
             index: currentIndex,
             children: [
               const ExploreScreen(),
-              // const FavoriteScreen(),
               MapScreen(
                 estates: snapshot.data!.docs,
                 initialLocation: const {},
               ),
+              const MyListingScreen(),
               const ProfileScreen(),
             ],
           );

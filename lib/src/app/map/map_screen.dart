@@ -98,6 +98,7 @@ class _MapScreenState extends State<MapScreen> {
                     child: GestureDetector(
                       onTap: () => showModalBottomSheet(
                           showDragHandle: true,
+                          isScrollControlled: true,
                           context: context,
                           builder: (context) => MapEstateDetail(
                                 estate: e,

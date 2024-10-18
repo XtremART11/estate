@@ -8,6 +8,7 @@ class EstateRepository {
   Future<void> addEstate(Map<String, dynamic> data) async {
     try {
       final fileLinks = await uploadService(data['fileLinks']);
+      final landTitle = await uploadService(data['landTitle']);
       final featuredImageLink = await uploadService(data['featuredImageLink']);
       await firestore.collection('estates').add({
         'agentId': FirebaseAuth.instance.currentUser!.uid,
@@ -19,6 +20,7 @@ class EstateRepository {
         'description': data['description'],
         'location': data['location'],
         'area': data['area'],
+        'landTitle': landTitle.isNotEmpty ? landTitle.single : "",
         'fileUrls': fileLinks,
       });
       logInfo('Document created successfully');

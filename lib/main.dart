@@ -1,5 +1,3 @@
-import 'package:estate/src/app/agent/home_screen.dart';
-import 'package:estate/src/app/auth/screens/login_screen.dart';
 import 'package:estate/src/app/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,7 +65,7 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: StreamBuilder(
           builder: (context, snapshot) {
-              return const MainScreen();
+            return const MainScreen();
           },
           stream: FirebaseAuth.instance.authStateChanges(),
         ),

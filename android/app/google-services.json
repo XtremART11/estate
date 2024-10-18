@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "299553468795",
-    "project_id": "real-estate-23c0d",
-    "storage_bucket": "real-estate-23c0d.appspot.com"
+    "project_number": "1083830090538",
+    "project_id": "real-estate-371d6",
+    "storage_bucket": "real-estate-371d6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:299553468795:android:4a904097924ed538a0cdde",
+        "mobilesdk_app_id": "1:1083830090538:android:f45b34c831056cd2217c53",
+        "android_client_info": {
+          "package_name": "com.estate.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPWoAouGaj_O-uVji3GiYvqUtO0wTK64I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083830090538:android:b1073c3c736ba369217c53",
         "android_client_info": {
           "package_name": "com.example.estate"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBDHi5EYQ03hsflCokwTJZsQs66Dj0yAzM"
+          "current_key": "AIzaSyCPWoAouGaj_O-uVji3GiYvqUtO0wTK64I"
         }
       ],
       "services": {

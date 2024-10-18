@@ -29,7 +29,9 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   List<Map<String, dynamic>> coordinates = [];
   List fileLinks = [];
+  List landTitlePath = [];
   List featuredImageLink = [];
+  bool hasLandTitle = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,32 +70,90 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: FormBuilderValidators.required(),
                             name: "fileLinks",
-                            decoration: const InputDecoration(labelText: "Ajouter des images et videos"),
+                            decoration: const InputDecoration(labelText: "Images/vidéos"),
                             maxFiles: null,
                             allowMultiple: true,
                             previewImages: true,
                             onChanged: (val) {
-                              for (var v in val!) {
-                                fileLinks.add(v.xFile);
-                              }
-                              setState(() {});
-                              logInfo(fileLinks);
+                              setState(() {
+                                for (var v in val!) {
+                                  fileLinks.add(v.xFile);
+                                }
+                              });
                             },
-                            typeSelectors: const [
+                            typeSelectors: [
                               TypeSelector(
-                                type: FileType.any,
-                                selector: Padding(
-                                  padding: EdgeInsets.only(bottom: 10),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.add_circle),
-                                      Gap(5),
-                                      Text("Cliquer ici pour ajouter "),
-                                    ],
-                                  ),
-                                ),
+                                type: FileType.media,
+                                selector: TextButton.icon(
+                                    icon: Icon(Icons.add_circle),
+                                    style: TextButton.styleFrom(
+                                      disabledForegroundColor: Colors.black54,
+                                      foregroundColor: Colors.black54,
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                    onPressed: null,
+                                    label: Text("Cliquer ici pour ajouter ")),
                               ),
                             ],
+                          ),
+                          const Gap(10),
+                          FormBuilderRadioGroup(
+                            separator: SizedBox(width: 50),
+                            decoration: InputDecoration(labelText: 'Avez-vous un titre foncier ?'),
+                            name: 'name',
+                            validator: FormBuilderValidators.required(),
+                            onChanged: (value) => setState(() {
+                              hasLandTitle = value == 'true' ? true : false;
+                              logInfo(hasLandTitle);
+                            }),
+                            options: [
+                              FormBuilderFieldOption(
+                                value: 'true',
+                                child: const Text('Oui'),
+                              ),
+                              FormBuilderFieldOption(
+                                value: 'false',
+                                child: const Text('Non'),
+                              ),
+                            ],
+                          ),
+                          Visibility(
+                            visible: hasLandTitle,
+                            child: Column(
+                              children: [
+                                Gap(10),
+                                FormBuilderFilePicker(
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: FormBuilderValidators.required(),
+                                  name: "landTile",
+                                  decoration:
+                                      const InputDecoration(counter: SizedBox.shrink(), labelText: "Titre foncier"),
+                                  maxFiles: 1,
+                                  previewImages: true,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      for (var v in val!) {
+                                        landTitlePath.add(v.xFile);
+                                      }
+                                    });
+                                  },
+                                  typeSelectors: [
+                                    TypeSelector(
+                                      type: FileType.any,
+                                      selector: TextButton.icon(
+                                          icon: Icon(Icons.add_circle),
+                                          style: TextButton.styleFrom(
+                                            disabledForegroundColor: Colors.black54,
+                                            foregroundColor: Colors.black54,
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onPressed: null,
+                                          label: Text("Cliquer ici pour ajouter ")),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           const Gap(10),
                           FormBuilderTextField(
@@ -157,10 +217,8 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                           ),
                           const Gap(10),
                           FormBuilderTextField(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: FormBuilderValidators.numeric(),
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Coordonnees'),
+                            decoration: const InputDecoration(labelText: 'Coordonnées des bornes du terrain'),
                             name: 'coordinates',
                             enabled: true,
                             onTap: () => showAdaptiveDialog(
@@ -169,7 +227,7 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                                   final latitudeCtrl = TextEditingController();
                                   final longitudeCtrl = TextEditingController();
                                   return AlertDialog(
-                                    title: const Text('Ajouter les points geographiques du terrain'),
+                                    title: const Text('Ajouter les coordonnées d\'une borne'),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -232,6 +290,7 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   ref.notifier(propertyControllerProvider).addEstate(
+                                        landTitle: landTitlePath,
                                         city: cityCtrl.text,
                                         price: priceCtrl.text,
                                         description: descriptionCtrl.text,

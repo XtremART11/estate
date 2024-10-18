@@ -1,4 +1,5 @@
 import 'package:estate/src/app/auth/auth_controller.dart';
+import 'package:estate/src/app/main_screen.dart';
 import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -7,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
 import '../../../core/utils.dart';
-import '../../agent/home_screen.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -83,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             const Gap(10),
                             FormBuilderTextField(
+                              obscureText: obscureText,
                               controller: passwordController,
                               name: 'password',
                               decoration: InputDecoration(
@@ -114,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           password: passwordController.text,
                                           onSuccess: () {
                                             showToast(context, 'Compte cree avec succes');
-                                            navigateToReplace(context, const HomeScreen());
+                                            navigateToReplace(context, const MainScreen());
                                           },
                                         );
                                   }
