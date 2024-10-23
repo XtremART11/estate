@@ -3,6 +3,7 @@ import 'package:estate/src/app/main_screen.dart';
 import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
@@ -39,14 +40,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Creer un compte',
-                        style: textTheme.headlineMedium,
+                      Center(
+                        child: SvgPicture.asset(
+                          "assets/images/register.svg",
+                          height: 250,
+                        ),
                       ),
                       Row(
                         children: [
                           const Text(
-                            'Vous avez deja un compte ?',
+                            'Vous avez déjà un compte ?',
                           ),
                           TextButton(
                             onPressed: () => navigateTo(context, const LoginScreen()),
@@ -120,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         );
                                   }
                                 },
-                                child: const Text('Creer mon compte')),
+                                child: const Text('Créer mon compte')),
                             // const Text("S'inscrire en tant que Agent immobilier"),
                           ])),
                     ],

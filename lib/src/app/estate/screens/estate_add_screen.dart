@@ -1,5 +1,5 @@
-import 'package:estate/src/app/agent/profile_screen.dart';
 import 'package:estate/src/app/estate/estate_controller.dart';
+import 'package:estate/src/app/my_listing_screen.dart';
 import 'package:estate/src/core/default_app_spacing.dart';
 import 'package:estate/src/core/log.dart';
 import 'package:estate/src/core/utils.dart';
@@ -175,7 +175,7 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                           FormBuilderTextField(
                             autovalidateMode: AutovalidateMode.onUserInteraction,
                             validator: FormBuilderValidators.numeric(),
-                            decoration: const InputDecoration(labelText: 'Prix (/m²)'),
+                            decoration: const InputDecoration(labelText: 'Prix (au m²)'),
                             name: 'price',
                             controller: priceCtrl,
                             keyboardType: TextInputType.number,
@@ -265,17 +265,28 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                                 }),
                           ),
                           const Gap(5),
-                          Wrap(
-                            children: coordinates
-                                .map(
-                                  (e) => Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                                    child: Chip(
-                                      label: Text('x:${e['latitude']} y:${e['longitude']}'),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Wrap(
+                              children: coordinates
+                                  .map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                                      child: Chip(
+                                        visualDensity: VisualDensity.compact,
+                                        elevation: 0,
+                                        side: BorderSide(color: Colors.grey.withOpacity(0.09)),
+                                        padding: EdgeInsets.zero,
+                                        labelStyle: textTheme(context).labelSmall?.copyWith(color: Colors.black54),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(1000),
+                                        ),
+                                        label: Text('${e['latitude']}, ${e['longitude']}'),
+                                      ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                           const Gap(10),
                           FormBuilderTextField(
@@ -303,7 +314,7 @@ class _EstateAddScreenState extends State<EstateAddScreen> {
                                         onSuccess: () => {
                                           navigateTo(
                                             context,
-                                            const ProfileScreen(),
+                                            const MyListingScreen(),
                                           ),
                                           showToast(context, 'Propriete ajoutee avec success')
                                         },

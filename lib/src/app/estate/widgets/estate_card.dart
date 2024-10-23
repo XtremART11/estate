@@ -18,8 +18,9 @@ class EstateCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: const Color(0xffF5F4F8),
-        elevation: 0.1,
+        // color: const Color(0xffF5F4F8),
+        color: Colors.transparent,
+        elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
@@ -33,7 +34,7 @@ class EstateCard extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: CachedNetworkImage(
                         imageUrl: estate['featuredImage'],
-                        height: screenH(context) * 0.23,
+                        height: screenH(context) * 0.3,
                         width: screenW(context),
                         fit: BoxFit.cover,
                       ),
@@ -47,34 +48,67 @@ class EstateCard extends StatelessWidget {
                     DefaultTextStyle(
                       style: textTheme(context).bodyLarge!.copyWith(color: const Color.fromARGB(255, 8, 24, 51)),
                       child: Flexible(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.location_pin,
-                              color: Colors.red.shade300,
+                            DefaultTextStyle(
+                              style: textTheme(context)
+                                  .bodyLarge!
+                                  .copyWith(fontWeight: FontWeight.w600, color: const Color.fromARGB(255, 8, 24, 51)),
+                              // child: Row(
+                              //   mainAxisAlignment: MainAxisAlignment.start,
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     Text("${estate['quarter']},"),
+                              //     Text(" ${estate['city']}"),
+                              //   ],
+                              // ),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                subtitle: Wrap(
+                                  children: [
+                                    Text(
+                                      '${estate['price']} Fcfa/m²,',
+                                      style: textTheme(context).bodySmall?.copyWith(color: Colors.grey),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      estate['landTitle'].isNotEmpty ? 'Titre de propriété' : 'Non Titré',
+                                      style: textTheme(context).bodySmall?.copyWith(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                trailing: Text("${estate['area']} m²"),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("${estate['quarter']},"),
+                                    Text(" ${estate['city']}"),
+                                  ],
+                                ),
+                              ),
                             ),
-                            Text("${estate['quarter']},"),
-                            Text(" ${estate['city']}"),
+                            // Gap(5),
+                            // Text(
+                            //   'Superfice : ${estate['area']}m²',
+                            //   style: textTheme(context).bodySmall?.copyWith(color: Colors.grey),
+                            // ),
+                            // Gap(3),
+                            // Text(
+                            //   'Prix/m² : ${estate['price']}m²',
+                            //   style: textTheme(context).bodySmall?.copyWith(color: Colors.grey),
+                            // ),
+                            // Gap(3),
+                            // Text(
+                            //   'Titré : ${estate['price']}m²',
+                            //   style: textTheme(context).bodySmall?.copyWith(color: Colors.grey),
+                            // ),
                           ],
                         ),
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.square_foot_rounded,
-                          color: Colors.blue,
-                        ),
-                        Text(
-                          '${estate['area']}m²',
-                          style: textTheme(context).bodyLarge?.copyWith(color: const Color(0xff8f92a8)),
-                        ),
-                      ],
                     ),
                   ],
                 ),

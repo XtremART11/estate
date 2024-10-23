@@ -1,11 +1,16 @@
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:estate/src/app/map/map_estate_detail.dart';
+import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:flutter_map_cache/flutter_map_cache.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:refena_flutter/refena_flutter.dart';
 
 class MapScreen extends StatefulWidget {
-  final Map<String, dynamic> initialLocation;
+  final Map<String, dynamic>? initialLocation;
   final List estates;
 
   const MapScreen({super.key, required this.estates, required this.initialLocation});
@@ -14,7 +19,9 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMixin {
+  late final _animatedMapController =
+      AnimatedMapController(vsync: this, duration: Duration(milliseconds: 5000), curve: Curves.easeInOut);
   _getUserLocation() async {
     Location location = Location();
 
@@ -44,7 +51,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  final mapController = MapController();
   LatLng userLocation = const LatLng(4, 9);
   @override
   void initState() {
@@ -53,30 +59,51 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   @override
+  void dispose() {
+    _animatedMapController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cachePath = context.watch(pathProvider);
     return Scaffold(
       body: FlutterMap(
-          mapController: mapController,
+          mapController: _animatedMapController.mapController,
           options: MapOptions(
-              onMapReady: () => mapController.move(const LatLng(7.532110, 12.960185), 6),
-              keepAlive: true,
-              initialZoom: 6,
-              initialCenter: userLocation
-
-              //double.parse(initialLocation['lat']),
-              //double.parse(initialLocation['long']),
-
-              ),
+            onMapReady: () {
+              if (widget.initialLocation!.isNotEmpty) {
+                _animatedMapController.animateTo(
+                    zoom: 19,
+                    dest: LatLng(
+                        double.parse(widget.initialLocation?['lat']), double.parse(widget.initialLocation?['long'])));
+              }
+            },
+            keepAlive: true,
+            initialZoom: 6,
+            initialCenter: widget.initialLocation!.isNotEmpty
+                ? LatLng(
+                    double.parse(widget.initialLocation?['lat']),
+                    double.parse(widget.initialLocation?['long']),
+                  )
+                : userLocation,
+          ),
           children: [
             TileLayer(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              tileProvider: CachedTileProvider(
+                maxStale: Duration(days: 7),
+                store: HiveCacheStore(cachePath),
+              ),
             ),
             PolygonLayer(
               polygons: [
                 ...widget.estates.map((e) {
                   return Polygon(
                     borderStrokeWidth: 2,
-                    color: const Color.fromARGB(255, 164, 197, 224),
+                    color: e['landTitle'].isNotEmpty
+                        ? Colors.red.withOpacity(0.2)
+                        : const Color.fromARGB(255, 164, 197, 224),
                     points: [
                       ...e['coordinates'].map((coord) {
                         final lat = double.parse(coord['latitude']);
@@ -104,9 +131,9 @@ class _MapScreenState extends State<MapScreen> {
                                 estate: e,
                                 estates: widget.estates,
                               )),
-                      child: const Icon(
+                      child: Icon(
                         Icons.location_pin,
-                        color: Colors.red,
+                        color: e['landTitle'].isNotEmpty ? Colors.red : Colors.blue,
                         size: 35,
                       ),
                     ),

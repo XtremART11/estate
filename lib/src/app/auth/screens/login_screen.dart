@@ -3,6 +3,7 @@ import 'package:estate/src/app/main_screen.dart';
 import 'package:estate/src/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:refena_flutter/refena_flutter.dart';
@@ -39,12 +40,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Se connecter',
-                          style: textTheme.headlineMedium,
-                        ),
-                        const Text(
-                          'Connectez-vous à votre compte afin de pouvoir ajouter de nouveaux immeubles',
+                        Center(
+                          child: SvgPicture.asset(
+                            "assets/images/login.svg",
+                            height: 250,
+                          ),
                         ),
                         const Gap(20),
                         FormBuilderTextField(

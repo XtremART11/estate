@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:refena_flutter/refena_flutter.dart';
+
 TextTheme textTheme(BuildContext context) => Theme.of(context).textTheme;
 screenH(BuildContext context) => MediaQuery.of(context).size.height;
 screenW(BuildContext context) => MediaQuery.of(context).size.width;
@@ -23,3 +25,6 @@ showToast(BuildContext context, String message) => ScaffoldMessenger.of(context)
         content: Text(message),
       ),
     );
+final pathProvider = Provider<String>((ref) {
+  throw UnimplementedError();
+});

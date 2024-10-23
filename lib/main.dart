@@ -1,7 +1,10 @@
 import 'package:estate/src/app/main_screen.dart';
+import 'package:estate/src/core/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
 import 'firebase_options.dart';
@@ -11,7 +14,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(RefenaScope(child: const MainApp()));
+  runApp(RefenaScope(overrides: [
+    pathProvider.overrideWithFuture((ref) async {
+      final cacheDirectory = await getApplicationDocumentsDirectory();
+      return cacheDirectory.path;
+    }),
+  ], child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -21,14 +29,28 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(useMaterial3: true).copyWith(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          titleTextStyle:
+              textTheme(context).bodyLarge?.copyWith(fontFamily: GoogleFonts.lato().fontFamily, fontSize: 18),
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          elevation: 10,
+        ),
+        fontFamily: GoogleFonts.lato().fontFamily,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         inputDecorationTheme: InputDecorationTheme(
-          border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 15,
+          ),
+          labelStyle: TextStyle(color: Colors.grey),
+          floatingLabelStyle: TextStyle(color: Colors.grey),
+          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.5))),
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
           errorBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
           ),

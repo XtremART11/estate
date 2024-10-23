@@ -29,10 +29,12 @@ class EstateRepository {
     }
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getEstates([String uid = '']) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getEstates([String uid = '', String query = '']) {
     return uid.isNotEmpty
         ? firestore.collection('estates').where('agentId', isEqualTo: uid).snapshots()
-        : firestore.collection('estates').snapshots();
+        : query.isNotEmpty
+            ? firestore.collection('estates').where('city', isEqualTo: query).snapshots()
+            : firestore.collection('estates').snapshots();
   }
 
   Future<void> updateEstate(String estateId, Map<String, dynamic> data) async {

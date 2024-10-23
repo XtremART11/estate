@@ -78,13 +78,25 @@ class ProfileScreen extends StatelessWidget {
                               ],
                             );
                           }),
+                      Gap(20),
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow.shade800,
+                              foregroundColor: Colors.black87,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1000)),
+                              minimumSize: Size(screenW(context) * 0.1, 35)),
+                          child: Text(
+                            'Vérifier mon compte',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
                       Gap(30),
                       Card(
                         margin: const EdgeInsets.only(bottom: 20),
                         elevation: 0,
                         child: ListTile(
                           leading: const Icon(Icons.privacy_tip_rounded),
-                          title: const Text('Confidentialité'),
+                          title: const Text('Devenir agent immobiler'),
                           trailing: const Icon(Icons.chevron_right_rounded),
                           contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
@@ -136,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                           leading: const Icon(Icons.logout_rounded),
                           selected: true,
                           selectedColor: Colors.red,
-                          title: const Text('Logout'),
+                          title: const Text('Se déconnecter'),
                           contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           onTap: () => showDialog(
                               context: context,
